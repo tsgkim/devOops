@@ -1,0 +1,7 @@
+[
+  {
+    "name" : "httpd",
+    "proc" : "httpd",
+    "restart": "service httpd start"
+  }
+]

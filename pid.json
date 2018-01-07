@@ -1,0 +1,17 @@
+[
+  {
+    "name" : "jenkins",
+    "proc" : "jenkins",
+    "restart": "sh /script/jenkins/start.sh"
+  },
+  {
+    "name" : "solo",
+    "proc" : "solo",
+    "restart": "sh /script/solo/start.sh"
+  },
+  {
+    "name" : "zhongzeConsole",
+    "proc" : "zhongzeConsole",
+    "restart": "sh /script/zhongzeConsole/start.sh"
+  }
+]
