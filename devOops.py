@@ -63,10 +63,10 @@ def isServiceRunning(name):
 
 def isPidRunning(name):
   "Check if a pid name is running"
-  res = subprocess.Popen("ps -ef | grep %s" % name,stdout=subprocess.PIPE,shell=True)
+  res = subprocess.Popen(name,stdout=subprocess.PIPE,shell=True)
   tomcats=res.stdout.readlines()
   counts=len(tomcats)
-  if counts == 2:
+  if counts == 1:
     return False
   return True
 
