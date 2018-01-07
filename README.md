@@ -50,13 +50,13 @@ type: normal
 # 接收短信手机号
 phone: 
 # 阿里大于短信发送模板变量
-username: tsgkim
+username: 
 # 服务异常通知短信模板
-notice-template: 
+noticeTemplate: 
 # 服务重启成功短信模板
-success-template: 
+successTemplate: 
 # 服务重启失败短信模板
-error-template: 
+errorTemplate: 
 
 [Other]
 # 设置多长时间重新监听服务、进程

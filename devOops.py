@@ -38,9 +38,9 @@ sign = Config.get('ali','sign')
 type = Config.get('ali','type')
 phone = Config.get('ali','phone')
 phone = Config.get('ali','phone')
-notice-template = Config.get('ali','notice-template')
-success-template = Config.get('ali','success-template')
-error-template = Config.get('ali','notice-template')
+noticeTemplate = Config.get('ali','noticeTemplate')
+successTemplate = Config.get('ali','successTemplate')
+errorTemplate = Config.get('ali','errorTemplate')
 
 INTERVAL = int(Config.get('Other', 'Interval'))  #Check every n seconds
 FNULL = open(os.devnull, 'w')
@@ -67,8 +67,8 @@ def isPidRunning(name):
   tomcats=res.stdout.readlines()
   counts=len(tomcats)
   if counts == 1:
-    return False
-  return True
+    return True
+  return False
 
 def notify(param, template):
   req = top.api.AlibabaAliqinFcSmsNumSendRequest()
@@ -99,7 +99,7 @@ def main():
 
     for p in PIDS:
         if not isPidRunning(p.get("proc")):
-          print "[!] At least one pid in your services.json is not already running. Please ensure pid are already running before starting."
+          print "[!] At least one pid in your pid.json is not already running. Please ensure pid are already running before starting."
           exit(1)
 
     while True:
@@ -111,14 +111,14 @@ def main():
         if not isServiceRunning(proc):
           print "[*] %s has stopped. Dispatching SMS." % name
           if restart:
-            notify("{name:%s,service:%s,cpu:%s%%,ram:%s%%}" %(username,name,cpu,mem),notice-template)
+            notify("{name:%s,service:%s,cpu:%s%%,ram:%s%%}" %(username,name,cpu,mem),noticeTemplate)
             r = call(restart.split(), stdout=FNULL, stderr=STDOUT)
             time.sleep(10)
             if isServiceRunning(proc):
-                notify("{name:%s,service:%s}" %(username,name),success-template)
+                notify("{name:%s,service:%s}" %(username,name),successTemplate)
                 print "[-] Successfully restarted %s" % name
             else:
-                notify("{name:%s,service:%s}" %(username,name),error-template)
+                notify("{name:%s,service:%s}" %(username,name),errorTemplate)
                 print "[-] Failed to restart %s" % name
 
       for p in PIDS:
@@ -126,14 +126,14 @@ def main():
         if not isPidRunning(proc):
           print "[*] %s has stopped. Dispatching SMS." % name
           if restart:
-            notify("{name:%s,service:%s,cpu:%s%%,ram:%s%%}" %(username,name,cpu,mem),notice-template)
+            notify("{name:%s,service:%s,cpu:%s%%,ram:%s%%}" %(username,name,cpu,mem),noticeTemplate)
             subprocess.Popen(restart,shell=True)
             time.sleep(120)
             if isPidRunning(proc):
-                notify("{name:%s,service:%s}" %(username,name),success-template)
+                notify("{name:%s,service:%s}" %(username,name),successTemplate)
                 print "[-] Successfully restarted %s" % name
             else:
-                notify("{name:%s,service:%s}" %(username,name),error-template)
+                notify("{name:%s,service:%s}" %(username,name),errorTemplate)
                 print "[-] Failed to restart %s" % name
 
 
