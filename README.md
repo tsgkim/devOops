@@ -30,7 +30,7 @@ eg: 配置 jenkins
        # 短信通知是哪个进程
        "name" : "jenkins",
        # 进程真正名称，必须和进程名一样
-       "proc" : "jenkins",
+       "proc" : "ps -ef | grep -v grep | egrep /usr/local/tomcat7/jenkins/conf/logging.properties",
        # 进程启动脚本，必须和进程启动命令一样（就是 怎样启动 这个 jenkins 所在的 tomcat 命令，我这里封装了一个脚本，所以写成这样）
         "restart": "sh /script/jenkins/start.sh"
      }
