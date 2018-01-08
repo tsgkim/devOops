@@ -26,14 +26,14 @@ eg: 配置 nginx
 ```
 eg: 配置 jenkins
     说明：jenkins 是一个 war 包，在tomcat容器中运行
-      {
-        # 短信通知是哪个进程
-        "name" : "jenkins",
-        # 进程真正名称，必须和进程名一样
-        "proc" : "jenkins",
-        # 进程启动脚本，必须和进程启动命令一样（就是 怎样启动 这个 jenkins 所在的 tomcat 命令，我这里封装了一个脚本，所以写成这样）
+     {
+       # 短信通知是哪个进程
+       "name" : "jenkins",
+       # 进程真正名称，必须和进程名一样
+       "proc" : "jenkins",
+       # 进程启动脚本，必须和进程启动命令一样（就是 怎样启动 这个 jenkins 所在的 tomcat 命令，我这里封装了一个脚本，所以写成这样）
         "restart": "sh /script/jenkins/start.sh"
-       }
+     }
 ```
        
 #### 配置 阿里大于短信通知、程序定时执行配置
@@ -89,4 +89,4 @@ pip install psutil
  运行日志存放位置： /var/log/python/devOops.log
 ```
 
-不懂配置请联系我QQ: 1515503123
+#### 不懂配置请联系我QQ: 1515503123
