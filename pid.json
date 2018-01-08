@@ -8,10 +8,5 @@
     "name" : "solo",
     "proc" : "ps -ef | grep -v grep | egrep org.b3log.solo.Starter",
     "restart": "sh /script/solo/start.sh"
-  },
-  {
-    "name" : "zhongzeConsole",
-    "proc" : "ps -ef | grep -v grep | egrep /usr/local/tomcat7/zhongzeConsole/conf/logging.properties",
-    "restart": "sh /script/zhongzeConsole/start.sh"
   }
 ]

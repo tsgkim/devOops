@@ -88,3 +88,5 @@ pip install psutil
  nohup python -u devOops.py > /var/log/python/devOops.log 2>&1 &
  运行日志存放位置： /var/log/python/devOops.log
 ```
+
+不懂配置请联系我QQ: 1515503123
