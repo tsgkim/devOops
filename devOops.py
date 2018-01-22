@@ -33,7 +33,6 @@ noticeTemplate = Config.get('ali', 'noticeTemplate')
 successTemplate = Config.get('ali', 'successTemplate')
 errorTemplate = Config.get('ali', 'errorTemplate')
 
-INTERVAL = int(Config.get('Other', 'Interval'))
 FNULL = open(os.devnull, 'w')
 
 # Read service monitoring file
