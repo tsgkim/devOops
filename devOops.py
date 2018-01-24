@@ -44,7 +44,7 @@ errorTemplate = Config.get('ali', 'errorTemplate')
 mail_host = Config.get('mail', 'mail_host')
 mail_user = Config.get('mail', 'mail_user')
 mail_pass = Config.get('mail', 'mail_pass')
-mail_receivers = Config.get('mail', 'mail_receivers')
+mail_receivers = Config.get('mail', 'mail_receivers').split(',')
 mail_subject = Config.get('mail', 'mail_subject')
 
 FNULL = open(os.devnull, 'w')
@@ -54,6 +54,7 @@ with open('services.json') as json_data:
     SERVICES = json.load(json_data)
 
 print get_time(), " --- 加载 pid.json"
+print
 with open('pid.json') as pid_data:
     PIDS = json.load(pid_data)
 
@@ -72,31 +73,31 @@ def send_sms(param, template):
     try:
         resp = req.getResponse()
         print get_time(), ' --- ', resp
-        print get_time(), "短信发送成功！"
+        print get_time(), " --- 短信发送成功！"
     except Exception, e:
         print get_time(), ' --- ', e
-        print get_time(), "短信发送失败！"
+        print get_time(), " --- 短信发送失败！"
 
     return resp
 
 
 # 邮件发送配置
 def send_mail(content):
+    print content
     print get_time(), "邮件发送中......"
     msg = MIMEText(content, 'plain', 'utf-8')
     msg['Subject'] = mail_subject
     msg['From'] = mail_user
     # msg['To'] = ";".join(mail_to_list)
     try:
-        s = smtplib.SMTP()
-        s.connect(mail_host)
+        s = smtplib.SMTP_SSL(mail_host, 465)
         s.login(mail_user, mail_pass)
         s.sendmail(mail_user, mail_receivers, msg.as_string())
         s.close()
-        print get_time(), "邮件发送成功！"
+        print get_time(), " --- 邮件发送成功！"
     except Exception, e:
         print e
-        print get_time(), "邮件发送失败！"
+        print get_time(), " --- 邮件发送失败！"
 
 
 # 服务是否运行
@@ -118,9 +119,9 @@ def is_pid_running(name):
 
 
 # 通知
-def notify(param, template, subject, content):
+def notify(param, template, content):
     send_sms(param, template)
-    send_mail(subject, content)
+    send_mail(content)
 
 
 def main():
@@ -134,36 +135,40 @@ def main():
         if not is_service_running(proc):
             print get_time(), " --- %s 服务已停止，发送短信、邮件通知......" % name
             if restart:
-                notify("{name:%s, service:%s, cpu:%s%%, ram:%s%%}" % (username, name, cpu, mem), noticeTemplate,
-                       "%s 服务已停止，CPU: %s%，RAM：%s%" % (name, cpu, mem))
+                notify("{name:%s, service:%s, cpu:%s%%, ram:%s%%}" % (username, name, cpu, mem),
+                       noticeTemplate,
+                       "%s 服务已停止，CPU: %s%%，RAM：%s%%" % (name, cpu, mem))
                 call(restart.split(), stdout=FNULL, stderr=STDOUT)
                 time.sleep(10)
                 if is_service_running(proc):
                     notify("{name:%s, service:%s}" % (username, name), successTemplate,
-                           "%s 服务重启成功，CPU: %s%，RAM：%s%" % (name, cpu, mem))
+                           "%s 服务重启成功，CPU: %s%%，RAM：%s%%" % (name, cpu, mem))
                     print get_time(), " --- %s 服务重启成功" % name
                 else:
                     notify("{name:%s, service:%s}" % (username, name), errorTemplate,
-                           "%s 服务重启失败，CPU: %s%，RAM：%s%" % (name, cpu, mem))
+                           "%s 服务重启失败，CPU: %s%%，RAM：%s%%" % (name, cpu, mem))
                     print get_time(), " --- %s 服务重启失败" % name
+            print
 
     for p in PIDS:
         name, proc, restart = p.get("name"), p.get("proc"), p.get("restart")
         if not is_pid_running(proc):
             print get_time(), " --- %s 进程已经停止运行，发送短信、邮件通知......" % name
             if restart:
-                notify("{name:%s, service:%s, cpu:%s%%, ram:%s%%}" % (username, name, cpu, mem), noticeTemplate,
-                       "%s 进程已停止，CPU: %s%，RAM：%s%" % (name, cpu, mem))
+                notify("{name:%s, service:%s, cpu:%s%%, ram:%s%%}" % (username, name, cpu, mem),
+                       noticeTemplate,
+                       "%s 进程已停止，CPU: %s%%，RAM：%s%%" % (name, cpu, mem))
                 subprocess.Popen(restart, shell=True)
                 time.sleep(240)
                 if is_pid_running(proc):
                     notify("{name:%s, service:%s}" % (username, name), successTemplate,
-                           "%s 进程重启成功，CPU: %s%，RAM：%s%" % (name, cpu, mem))
+                           "%s 进程重启成功，CPU: %s%%，RAM：%s%%" % (name, cpu, mem))
                     print get_time(), " --- %s 进程重启成功" % name
                 else:
                     notify("{name:%s, service:%s}" % (username, name), errorTemplate,
-                           "%s 进程重启失败，CPU: %s%，RAM：%s%" % (name, cpu, mem))
+                           "%s 进程重启失败，CPU: %s%%，RAM：%s%%" % (name, cpu, mem))
                     print get_time(), " --- %s 进程重启失败" % name
+            print
 
 
 if __name__ == "__main__":
